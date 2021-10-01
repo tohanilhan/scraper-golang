@@ -33,3 +33,18 @@ type WatchComment struct {
 type SubComment struct {
 	SubComment 			  	[]string
 }
+
+func main() {
+
+	allWatches := []Watch{}
+	c:= colly.NewCollector(
+		colly.AllowedDomains("dolap.com","www.dolap.com"),
+	)
+	detailCollector := c.Clone()
+
+	c.OnHTML(`.col-holder`, func(e *colly.HTMLElement) {
+		productURL := e.ChildAttr("div.img-block > a", "href")
+		productURL = e.Request.AbsoluteURL(productURL)
+
+		detailCollector.Visit(productURL)
+	})
