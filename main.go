@@ -37,8 +37,8 @@ type SubComment struct {
 func main() {
 
 	allWatches := []Watch{}
-	c:= colly.NewCollector(
-		colly.AllowedDomains("dolap.com","www.dolap.com"),
+	c := colly.NewCollector(
+		colly.AllowedDomains("dolap.com", "www.dolap.com"),
 	)
 	detailCollector := c.Clone()
 
@@ -48,7 +48,6 @@ func main() {
 
 		detailCollector.Visit(productURL)
 	})
-
 	detailCollector.OnHTML(`.holder`, func(e *colly.HTMLElement) {
 		tempProduct := Watch{}
 		var err error
@@ -77,7 +76,7 @@ func main() {
 				tempReply := SubComment{}
 				a := element.ChildText("ul.replies-list > li > div.comment-detail > div.comment-holder > p")
 				if a != "" {
-					b := strings.Split(a,"@")
+					b := strings.Split(a, "@")
 					copy(b[i:], b[i+1:]) // Shift a[i+1:] left one index.
 					b[len(b)-1] = ""     // Erase last element (write zero value).
 					b = b[:len(b)-1]     // Truncate slice.
@@ -101,7 +100,6 @@ func main() {
 	for i := 1; i <= 277; i++ {
 		c.Visit("https://dolap.com/saat?sayfa=" + strconv.Itoa(i))
 	}
-
 
 	jsonRes, err := json.MarshalIndent(allWatches, "", " ")
 	if err != nil {
