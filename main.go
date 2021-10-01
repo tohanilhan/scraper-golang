@@ -100,4 +100,38 @@ func main() {
 	for i := 1; i <= 277; i++ {
 		c.Visit("https://dolap.com/saat?sayfa=" + strconv.Itoa(i))
 	}
+
+	jsonRes, err := json.MarshalIndent(allWatches, "", " ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Setting the filename
+	fileName := "dolap_new.json"
+
+	// Calling the writeFile function to write the data into the json file
+	writeFile(fileName, string(jsonRes))
+
+	fmt.Println("Done !")
+}
+
+
+
+// Function for writing the json file with the data
+func writeFile(fileName string, data string) {
+	f, openerr := os.Create(fileName)
+
+	if openerr != nil {
+		log.Fatal(openerr)
+	}
+
+	defer f.Close()
+
+	_, err2 := f.WriteString(data)
+
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+	fmt.Println("Writing file:", fileName)
 }
